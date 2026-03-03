@@ -14,7 +14,12 @@ ledroit-marketplace/
 │       │   └── plugin.json
 │       └── skills/
 │           └── legifrance/
-│               └── SKILL.md
+│               ├── SKILL.md
+│               └── references/
+│                   ├── tools-and-codes.md
+│                   ├── search-parameters.md
+│                   ├── veille-juridique.md
+│                   └── advanced-patterns.md
 ├── CLAUDE.md                     # Ce fichier
 └── README.md
 ```

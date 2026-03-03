@@ -9,6 +9,8 @@ Ce projet regroupe des plugins et competences permettant a Claude Code d'assiste
 ### /legifrance
 Recherche et consultation du droit francais via l'API Legifrance (codes, lois, jurisprudence, conventions collectives, JORF).
 
+La skill fonctionne avec le MCP Legifrance : elle fournit les workflows et patterns de recherche, le MCP fournit l'acces aux donnees. Inclut 4 fichiers de reference pour les cas avances (parametres de recherche, veille juridique, patterns de concordance, catalogue des 35+ outils).
+
 ## MCP Servers
 
 ### Legifrance (DILA - API PISTE)
@@ -49,6 +51,14 @@ ledroit-marketplace/
 │   └── marketplace.json        # Registre de la marketplace
 ├── plugins/
 │   └── legifrance-plugin/      # Plugin Legifrance (droit francais)
+│       ├── .claude-plugin/plugin.json
+│       └── skills/legifrance/
+│           ├── SKILL.md        # Skill /legifrance (prompt + workflows)
+│           └── references/     # Documentation de reference
+│               ├── tools-and-codes.md
+│               ├── search-parameters.md
+│               ├── veille-juridique.md
+│               └── advanced-patterns.md
 ├── CLAUDE.md                   # Instructions pour Claude Code
 └── README.md                   # Ce fichier
 ```
