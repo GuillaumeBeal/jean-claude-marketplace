@@ -5,9 +5,9 @@
   },
   "plugins": [
     {
-      "name": "review-plugin",
-      "source": "./plugins/review-plugin",
-      "description": "Adds a /review skill for quick code reviews"
+      "name": "legifrance-plugin",
+      "source": "./plugins/legifrance-plugin",
+      "description": "Acces au droit francais via l'API Legifrance (DILA) - codes, lois, jurisprudence, conventions collectives, JORF"
     }
   ]
 }
