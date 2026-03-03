@@ -1,0 +1,13 @@
+{
+  "name": "ledroit-marketplace",
+  "owner": {
+    "name": "Guillaume B"
+  },
+  "plugins": [
+    {
+      "name": "review-plugin",
+      "source": "./plugins/review-plugin",
+      "description": "Adds a /review skill for quick code reviews"
+    }
+  ]
+}
