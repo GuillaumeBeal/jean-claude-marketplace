@@ -78,19 +78,18 @@ ledroit-marketplace/
 
 Pour utiliser le serveur Legifrance, ajoutez-le a votre configuration MCP Claude Code. Le serveur se connecte a l'API PISTE de la DILA (Direction de l'information legale et administrative).
 
-**Exemple de configuration (`~/.claude/settings.json` ou projet) :**
+Le plugin inclut un fichier `.mcp.json` pret a l'emploi. Pour l'activer dans un projet Claude Code, copiez-le a la racine de votre projet ou ajoutez la configuration dans `~/.claude/settings.json` :
 
 ```json
 {
   "mcpServers": {
     "legifrance": {
-      "url": "https://<votre-instance-legifrance-mcp>"
+      "type": "streamable-http",
+      "url": "https://legifrance.stellarspace.tech/mcp"
     }
   }
 }
 ```
-
-> L'API Legifrance necessite des identifiants PISTE (client_id / client_secret) obtenus sur [piste.gouv.fr](https://piste.gouv.fr).
 
 ## Contribuer
 
