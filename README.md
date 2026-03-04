@@ -6,10 +6,18 @@ Ce projet regroupe des plugins et competences permettant a Claude Code d'assiste
 
 ## Skills disponibles
 
-### /legifrance
-Recherche et consultation du droit francais via l'API Legifrance (codes, lois, jurisprudence, conventions collectives, JORF).
+| Commande | Description |
+|----------|-------------|
+| `/legifrance` | Skill principale — recherche et consultation generaliste du droit francais |
+| `/article` | Consulter un article de code (`/article L225-1 code de commerce`) |
+| `/loi` | Trouver une loi par nom courant ou numero (`/loi Sapin 2`) |
+| `/jurisprudence` | Rechercher des decisions de justice (`/jurisprudence responsabilite 2024`) |
+| `/convention` | Consulter une convention collective (`/convention Syntec`) |
+| `/veille` | Veille juridique par domaine et periode (`/veille droit du travail 3 mois`) |
+| `/jo` | Derniers textes du Journal Officiel (`/jo`) |
+| `/verifier` | Verifier une citation juridique (`/verifier art. 1382 code civil`) |
 
-La skill fonctionne avec le MCP Legifrance : elle fournit les workflows et patterns de recherche, le MCP fournit l'acces aux donnees. Inclut 4 fichiers de reference pour les cas avances (parametres de recherche, veille juridique, patterns de concordance, catalogue des 35+ outils).
+Toutes les skills fonctionnent avec le MCP Legifrance : elles guident les workflows de recherche, le MCP fournit l'acces aux donnees officielles.
 
 ## MCP Servers
 
@@ -53,13 +61,15 @@ ledroit-marketplace/
 │   └── legifrance-plugin/      # Plugin Legifrance (droit francais)
 │       ├── .claude-plugin/plugin.json
 │       ├── .mcp.json               # Serveur MCP Legifrance (streamable-http)
-│       └── skills/legifrance/
-│           ├── SKILL.md        # Skill /legifrance (prompt + workflows)
-│           └── references/     # Documentation de reference
-│               ├── tools-and-codes.md
-│               ├── search-parameters.md
-│               ├── veille-juridique.md
-│               └── advanced-patterns.md
+│       └── skills/
+│           ├── legifrance/     # /legifrance (skill principale + references)
+│           ├── article/        # /article
+│           ├── loi/            # /loi
+│           ├── jurisprudence/  # /jurisprudence
+│           ├── convention/     # /convention
+│           ├── veille/         # /veille
+│           ├── jo/             # /jo
+│           └── verifier/       # /verifier
 ├── CLAUDE.md                   # Instructions pour Claude Code
 └── README.md                   # Ce fichier
 ```

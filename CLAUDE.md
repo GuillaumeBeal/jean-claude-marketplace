@@ -14,13 +14,27 @@ ledroit-marketplace/
 │       │   └── plugin.json
 │       ├── .mcp.json                 # Config du serveur MCP Legifrance
 │       └── skills/
-│           └── legifrance/
-│               ├── SKILL.md
-│               └── references/
-│                   ├── tools-and-codes.md
-│                   ├── search-parameters.md
-│                   ├── veille-juridique.md
-│                   └── advanced-patterns.md
+│           ├── legifrance/           # /legifrance — skill principale
+│           │   ├── SKILL.md
+│           │   └── references/
+│           │       ├── tools-and-codes.md
+│           │       ├── search-parameters.md
+│           │       ├── veille-juridique.md
+│           │       └── advanced-patterns.md
+│           ├── article/              # /article — article de code
+│           │   └── SKILL.md
+│           ├── loi/                  # /loi — recherche de loi
+│           │   └── SKILL.md
+│           ├── jurisprudence/        # /jurisprudence — decisions de justice
+│           │   └── SKILL.md
+│           ├── convention/           # /convention — conventions collectives
+│           │   └── SKILL.md
+│           ├── veille/               # /veille — veille juridique
+│           │   └── SKILL.md
+│           ├── jo/                   # /jo — Journal Officiel
+│           │   └── SKILL.md
+│           └── verifier/             # /verifier — verification de reference
+│               └── SKILL.md
 ├── CLAUDE.md                     # Ce fichier
 └── README.md
 ```
