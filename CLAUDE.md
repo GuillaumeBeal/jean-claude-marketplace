@@ -12,6 +12,7 @@ ledroit-marketplace/
 │   └── legifrance-plugin/        # Plugin Legifrance (droit francais)
 │       ├── .claude-plugin/
 │       │   └── plugin.json
+│       ├── .mcp.json                 # Config du serveur MCP Legifrance
 │       └── skills/
 │           └── legifrance/
 │               ├── SKILL.md
