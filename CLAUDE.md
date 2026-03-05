@@ -1,11 +1,11 @@
-# LeDroit Marketplace
+# Jean-Claude Marketplace
 
 Marketplace de skills (competences) en droit francais pour Claude Code.
 
 ## Structure du projet
 
 ```
-ledroit-marketplace/
+jean-claude-marketplace/
 ├── .claude-plugin/
 │   └── marketplace.json          # Configuration principale de la marketplace
 ├── plugins/

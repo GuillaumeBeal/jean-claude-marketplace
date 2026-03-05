@@ -1,4 +1,4 @@
-# LeDroit Marketplace
+# Jean-Claude Marketplace
 
 Marketplace de skills en droit francais pour Claude Code.
 
@@ -59,7 +59,7 @@ Connecteur vers la plateforme open data du gouvernement francais. Permet de rech
 ## Structure du projet
 
 ```
-ledroit-marketplace/
+jean-claude-marketplace/
 ├── .claude-plugin/
 │   └── marketplace.json        # Registre de la marketplace
 ├── plugins/
