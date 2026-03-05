@@ -1,5 +1,8 @@
 {
   "name": "ledroit-marketplace",
+  "metadata": {
+    "description": "Marketplace de skills et commandes pour le droit français dans Claude Code. Donne accès aux sources officielles : codes, lois, décrets, jurisprudence, conventions collectives et Journal Officiel via l'API Légifrance (DILA)."
+  },
   "owner": {
     "name": "Guillaume B"
   },
