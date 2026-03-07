@@ -5,7 +5,7 @@
 ### Étape 1 — Cadrer la demande
 Identifier : domaine juridique, période, niveau de détail souhaité.
 
-### Étape 2 — Lancer les recherches parallèles sur 4 fonds
+### Étape 2 — Lancer les recherches parallèles sur 4-5 fonds
 
 **a) Jurisprudence judiciaire (JURI)**
 ```
@@ -43,15 +43,32 @@ searchUsingPOST(fond: "JORF", recherche: {
     typeRecherche: "TOUS_LES_MOTS_DANS_UN_CHAMP",
     valeur: "<mots-clés du domaine>", operateur: "ET"
   }], operateur: "ET"}],
+  filtres: [{facette: "DATE_PUBLICATION", dates: {start: "<début>", end: "<fin>"}}],
   operateur: "ET", pageNumber: 1, pageSize: 10,
   sort: "PUBLICATION_DATE_DESC", typePagination: "DEFAUT"
 })
 ```
+⚠ JORF : utiliser `DATE_PUBLICATION` (pas `DATE_PUBLI` → erreur 500).
+
+**e) Délibérations CNIL** (si domaine RGPD / données personnelles)
+```
+searchUsingPOST(fond: "CNIL", recherche: {
+  champs: [{typeChamp: "ALL", criteres: [{
+    typeRecherche: "TOUS_LES_MOTS_DANS_UN_CHAMP",
+    valeur: "<mots-clés du domaine>", operateur: "ET"
+  }], operateur: "ET"}],
+  filtres: [{facette: "DATE_DELIB", dates: {start: "<début>", end: "<fin>"}}],
+  operateur: "ET", pageNumber: 1, pageSize: 10,
+  sort: "DATE_DECISION_DESC", typePagination: "DEFAUT"
+})
+```
+⚠ CNIL : utiliser `DATE_DELIB` (pas `DATE_DECISION` → erreur 500).
 
 ### Étape 3 — Approfondir les résultats pertinents
 - Jurisprudence : `displayJuriUsingPOST(textId: "JURITEXT...")`
 - Loi/décret : `displayLawDecreeUsingPOST(textId: "LEGITEXT...", date: "...")`
 - JORF : `displayJorfUsingPOST(textCid: "JORFTEXT...")`
+- CNIL : `displayCnilUsingPOST(textId: "CNILTEXT...")`
 
 ### Étape 4 — Structurer la revue
 

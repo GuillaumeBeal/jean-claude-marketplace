@@ -20,6 +20,24 @@ Skill pour utiliser le MCP Légifrance. Outils directement appelables, pas besoi
 3. **Date de consultation** : format YYYY-MM-DD, date du jour sauf si version historique demandée.
 4. **Enchaîner les appels** : un premier identifie le texte, un second récupère le contenu.
 5. **`searchUsingPOST` est TOUJOURS préférable** à `crossSearchUsingPOST` (qui ne fait que de l'autocomplétion de titres).
+6. **Facettes de date strictes** : chaque fond a sa propre facette. Voir table ci-dessous.
+
+## Facettes de date par fond — OBLIGATOIRE
+
+**Utiliser une mauvaise facette provoque une erreur 500. Toujours consulter cette table.**
+
+| Fond | Facette de date | Pièges courants |
+|------|----------------|-----------------|
+| `JORF` | `DATE_PUBLICATION` ou `DATE_SIGNATURE` | ~~`DATE_PUBLI`~~ → 500 ! |
+| `LODA_DATE` / `LODA_ETAT` | `DATE_SIGNATURE` | |
+| `CODE_DATE` | `DATE_VERSION` (**singleDate** uniquement !) | ~~`dates` range~~ → 500 ! |
+| `CETAT` / `JURI` / `JUFI` / `CONSTIT` | `DATE_DECISION` | |
+| `KALI` | `DATE_SIGNATURE` ou `DATE_PUBLICATION` | ~~`DATE_DECISION`~~ → 500 ! |
+| `CNIL` | `DATE_DELIB` | ~~`DATE_DECISION`~~ → 500 ! |
+| `ACCO` | `DATE_SIGNATURE` ou `DATE_DIFFUSION` | ~~`DATE_DECISION`~~ → 500 ! |
+| `CIRC` | `DATE_SIGNATURE` | |
+
+Détails complets : `references/search-parameters.md`
 
 ## Workflows principaux
 
@@ -101,11 +119,36 @@ IDCC courants : 1979 (HCR), 3248 (Métallurgie), 1486 (Syntec), 2098 (Prestatair
 
 ### Cas 6 : Textes récents au JO
 
-`getLastNJoUsingPOST(nbElement: 5)` pour les derniers JO. Ou `searchUsingPOST` fond=JORF.
+`getLastNJoUsingPOST(nbElement: 5)` pour les derniers JO.
 
-### Cas 7 : Version historique → voir `references/advanced-patterns.md`
+Recherche dans le JORF avec filtre de date :
+```json
+searchUsingPOST(fond: "JORF", recherche: {
+  champs: [{typeChamp: "ALL", criteres: [{
+    typeRecherche: "TOUS_LES_MOTS_DANS_UN_CHAMP", valeur: "mots-clés", operateur: "ET"
+  }], operateur: "ET"}],
+  filtres: [{facette: "DATE_PUBLICATION", dates: {start: "2025-01-01", end: "2026-03-01"}}],
+  operateur: "ET", pageNumber: 1, pageSize: 10, sort: "PUBLICATION_DATE_DESC", typePagination: "DEFAUT"
+})
+```
+⚠ Utiliser `DATE_PUBLICATION` (pas `DATE_PUBLI`).
 
-### Cas 8 : Veille juridique → voir `references/veille-juridique.md`
+### Cas 7 : Délibérations CNIL — `searchUsingPOST`
+
+```json
+searchUsingPOST(fond: "CNIL", recherche: {
+  champs: [{typeChamp: "ALL", criteres: [{
+    typeRecherche: "TOUS_LES_MOTS_DANS_UN_CHAMP", valeur: "sanction données personnelles", operateur: "ET"
+  }], operateur: "ET"}],
+  filtres: [{facette: "DATE_DELIB", dates: {start: "2025-01-01", end: "2026-03-01"}}],
+  operateur: "ET", pageNumber: 1, pageSize: 10, sort: "DATE_DECISION_DESC", typePagination: "DEFAUT"
+})
+```
+⚠ Utiliser `DATE_DELIB` (pas `DATE_DECISION`). Puis `displayCnilUsingPOST(textId: "CNILTEXT...")`.
+
+### Cas 8 : Version historique → voir `references/advanced-patterns.md`
+
+### Cas 9 : Veille juridique → voir `references/veille-juridique.md`
 
 ## Bonnes pratiques
 
