@@ -1,0 +1,5 @@
+{
+  "name": "inpi-rne-plugin",
+  "description": "Interrogation des API INPI : Registre National des Entreprises (RNE) et Propriété Industrielle (marques, brevets, dessins et modèles). Utile pour la due diligence M&A.",
+  "version": "0.1.0"
+}

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "inpi": {
+      "type": "streamable-http",
+      "url": "https://inpi.topinambour.space/mcp"
+    }
+  }
+}
