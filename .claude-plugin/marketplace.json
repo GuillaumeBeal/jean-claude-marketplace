@@ -1,26 +1,16 @@
 {
-  "name": "Jean-Claude-Marketplace",
+  "name": "Vpsoft-Marketplace",
   "metadata": {
-    "description": "Marketplace de skills et commandes pour le droit français dans Claude Code. Donne accès aux sources officielles : codes, lois, décrets, jurisprudence, conventions collectives et Journal Officiel via l'API Légifrance (DILA)."
+    "description": "Marketplace de skills et commandes pour le consulting autour de l'application VPSoft. Permet de trouver et utiliser des outils pour explorer et comprendre une application VPSoft via le serveur MCP. Exploration du modele de donnees, code dynamique, audit et diagnostic."
   },
   "owner": {
-    "name": "Guillaume B"
+    "name": "Guillaume Béal"
   },
   "plugins": [
-    {
-      "name": "legifrance-plugin",
-      "source": "./plugins/legifrance-plugin",
-      "description": "Acces au droit francais via l'API Legifrance (DILA) - codes, lois, jurisprudence, conventions collectives, JORF"
-    },
     {
       "name": "vpsoft-plugin",
       "source": "./plugins/vpsoft-plugin",
       "description": "Outils et skills pour explorer et comprendre une application VPSoft via le serveur MCP. Exploration du modele de donnees, code dynamique, audit et diagnostic."
-    },
-    {
-      "name": "droit-des-affaires-plugin",
-      "source": "./plugins/droit-des-affaires-plugin",
-      "description": "Skills pour le droit des affaires français : due diligence M&A, audit juridique, fusions-acquisitions, analyse corporate, fiscal, social, IP, contrats et conformité."
     }
   ]
 }

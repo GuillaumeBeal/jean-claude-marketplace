@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "legifrance": {
-      "type": "streamable-http",
-      "url": "https://legifrance.topinambour.space/mcp"
-    }
-  }
-}
