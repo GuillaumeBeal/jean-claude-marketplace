@@ -1,7 +1,7 @@
 {
   "name": "Jean-Claude-Marketplace",
   "metadata": {
-    "description": "Marketplace de skills et commandes pour Claude Code. Plugins de recherche juridique (Legifrance) et de due diligence en droit des affaires."
+    "description": "Marketplace de skills et commandes pour Claude Code. Plugins de recherche juridique (Legifrance), due diligence en droit des affaires, et interrogation des registres INPI (RNE, marques, brevets)."
   },
   "owner": {
     "name": "Guillaume Béal"
@@ -16,6 +16,11 @@
       "name": "droit-des-affaires-plugin",
       "source": "./plugins/droit-des-affaires-plugin",
       "description": "Due diligence en droit des affaires : analyse corporate, contrats, fiscal, social, PI, financement, RGPD et conformite reglementaire."
+    },
+    {
+      "name": "inpi-rne-plugin",
+      "source": "./plugins/inpi-rne",
+      "description": "Interrogation des API INPI : Registre National des Entreprises (RNE) et Propriete Industrielle (marques, brevets, dessins et modeles)."
     }
   ]
 }
