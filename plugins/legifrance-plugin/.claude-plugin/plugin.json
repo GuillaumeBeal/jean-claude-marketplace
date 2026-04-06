@@ -1,5 +1,5 @@
 {
   "name": "legifrance-plugin",
   "description": "Acces au droit francais via l'API Legifrance (DILA). Recherche dans les codes, lois, decrets, jurisprudence, conventions collectives et Journal Officiel.",
-  "version": "0.0.1"
+  "version": "0.0.2"
 }

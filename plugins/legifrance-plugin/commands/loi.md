@@ -1,49 +1,66 @@
 ---
 name: loi
-description: "Trouver une loi francaise par nom courant (Sapin 2, Pacte, Climat, Egalim...) ou par numero (n 2016-1691). Traduit automatiquement les noms courants en titres officiels pour la recherche Legifrance."
+description: "Trouver une loi française par nom courant (Sapin 2, Pacte, Climat, Egalim...) ou par numéro (n° 2016-1691). Traduit automatiquement les noms courants en titres officiels pour la recherche Légifrance."
 ---
 
 # /loi — Rechercher une loi
 
-Trouve une loi francaise a partir de son nom courant ou de son numero, via le MCP Legifrance.
+Trouve une loi française à partir de son nom courant ou de son numéro, via le MCP Légifrance.
 
-## Le probleme
+## Le problème
 
-Les lois sont indexees par **titre officiel**, pas par nom courant. Il faut traduire :
+Les lois sont indexées par **titre officiel**, pas par nom courant. Il faut traduire :
 
-| Nom courant | Mots-cles titre officiel |
+| Nom courant | Mots-clés titre officiel |
 |-------------|--------------------------|
 | Loi Sapin 2 | `transparence corruption modernisation` |
 | Loi Pacte | `croissance transformation entreprises` |
-| Loi Climat | `climat resilience` |
+| Loi Climat | `climat résilience` |
 | Loi Egalim | `agriculture alimentation` |
-| Loi Macron | `croissance activite economique` |
+| Loi Macron | `croissance activité économique` |
 | Loi El Khomri / Travail | `travail modernisation dialogue social` |
-| Loi Elan | `evolution logement amenagement numerique` |
+| Loi Elan | `évolution logement aménagement numérique` |
 | Loi Hamon | `consommation` |
-| Loi RGPD / Informatique | `informatique libertes` |
-| Loi Vigilance | `vigilance societes meres` |
+| Loi RGPD / Informatique | `informatique libertés` |
+| Loi Vigilance | `vigilance sociétés mères` |
 
 ## Workflow
 
 ### Par nom courant
-1. Traduire le nom courant en mots-cles du titre officiel
-2. `searchUsingPOST(fond: "LODA_DATE", recherche: {champs: [{typeChamp: "TITLE", criteres: [{typeRecherche: "UN_DES_MOTS", valeur: "<mots-cles>", operateur: "ET"}], operateur: "ET"}], operateur: "ET", pageNumber: 1, pageSize: 10, sort: "PERTINENCE", typePagination: "DEFAUT"})`
-3. Verifier le champ `appellations` dans les resultats pour confirmer
-4. `displayLawDecreeUsingPOST(textId: "<LEGITEXT...>", date: "<date du jour>")` pour le contenu
+1. Traduire le nom courant en mots-clés du titre officiel
+2. ```
+   search_texts(fond: "LODA_DATE", recherche: {
+     champs: [{typeChamp: "TITLE", criteres: [{
+       typeRecherche: "UN_DES_MOTS", valeur: "<mots-clés>", operateur: "ET"
+     }], operateur: "ET"}],
+     operateur: "ET", pageNumber: 1, pageSize: 10,
+     sort: "PERTINENCE", typePagination: "DEFAUT"
+   })
+   ```
+3. Vérifier le champ `appellations` dans les résultats pour confirmer
+4. `get_law_decree(textId: "<LEGITEXT...>", date: "<date du jour>")` pour le contenu
 
-### Par numero (ex: 2016-1691)
-1. `searchUsingPOST(fond: "LODA_DATE", recherche: {champs: [{typeChamp: "NUM", criteres: [{typeRecherche: "EXACTE", valeur: "2016-1691", operateur: "ET"}], operateur: "ET"}], operateur: "ET", pageNumber: 1, pageSize: 5, sort: "PERTINENCE", typePagination: "DEFAUT"})`
-2. `displayLawDecreeUsingPOST` pour le contenu
+### Par numéro (ex: 2016-1691)
+1. ```
+   search_texts(fond: "LODA_DATE", recherche: {
+     champs: [{typeChamp: "NUM", criteres: [{
+       typeRecherche: "EXPRESSION_EXACTE", valeur: "2016-1691", operateur: "ET"
+     }], operateur: "ET"}],
+     operateur: "ET", pageNumber: 1, pageSize: 5,
+     sort: "PERTINENCE", typePagination: "DEFAUT"
+   })
+   ```
+2. `get_law_decree(textId: "...", date: "...")` pour le contenu
 
 ### Par NOR
-1. `getJoWithNorUsingPOST(nor: "<NOR>")`
+1. `get_jorf_text(nor: "<NOR>")`
 
-## Reponse attendue
+## Réponse attendue
 
 - Titre officiel complet et nom courant (appellation)
-- Numero et date de signature
+- Numéro et date de signature
 - NOR
-- Etat juridique (en vigueur, partiellement abroge...)
-- Resume du contenu ou table des matieres si volumineuse
-- Identifiant LEGITEXT pour consultation ulterieure
+- État juridique (en vigueur, partiellement abrogé...)
+- Résumé du contenu ou table des matières si volumineuse
+- Identifiant LEGITEXT pour consultation ultérieure
+- Citation : `Loi n° [numéro] du [date] relative à [objet] (dite « [nom courant] »)`

@@ -1,35 +1,36 @@
 ---
 name: jurisprudence
-description: "Rechercher de la jurisprudence francaise : Cour de cassation, Conseil d'Etat, Conseil constitutionnel. Par theme, numero de pourvoi, ECLI, ou domaine juridique sur une periode."
+description: "Rechercher de la jurisprudence française : Cour de cassation, Conseil d'État, Conseil constitutionnel. Par thème, numéro de pourvoi, ECLI, ou domaine juridique sur une période."
 ---
 
 # /jurisprudence — Recherche de jurisprudence
 
-Recherche de decisions de justice francaises via le MCP Legifrance.
+Recherche de décisions de justice françaises via le MCP Légifrance.
 
 ## Workflow
 
-### Par theme / mots-cles
-1. Determiner le fonds : `JURI` (judiciaire) ou `CETAT` (administratif)
+### Par thème / mots-clés
+1. Déterminer le fonds : `JURI` (judiciaire), `CETAT` (administratif), `CONSTIT` (constitutionnel)
 2. Lancer la recherche :
 ```
-searchUsingPOST(fond: "JURI", recherche: {
+search_texts(fond: "JURI", recherche: {
   champs: [{typeChamp: "ALL", criteres: [{
     typeRecherche: "TOUS_LES_MOTS_DANS_UN_CHAMP",
-    valeur: "<mots-cles>", operateur: "ET"
+    valeur: "<mots-clés>", operateur: "ET"
   }], operateur: "ET"}],
-  filtres: [{facette: "DATE_DECISION", dates: {start: "<debut>", end: "<fin>"}}],
+  filtres: [{facette: "DATE_DECISION", dates: {start: "<début>", end: "<fin>"}}],
   operateur: "ET", pageNumber: 1, pageSize: 10,
-  sort: "DATE_DECISION_DESC", typePagination: "DEFAUT"
+  sort: "DATE_DESC", typePagination: "DEFAUT"
 })
 ```
-3. `displayJuriUsingPOST(textId: "JURITEXT...")` pour le texte complet
+3. `get_jurisprudence(textId: "JURITEXT...")` pour le texte complet
+4. Optionnel : `get_jurisprudence_classification(textId: "JURITEXT...")` pour le plan de classement
 
-### Par numero de pourvoi
+### Par numéro de pourvoi
 ```
-searchUsingPOST(fond: "JURI", recherche: {
+search_texts(fond: "JURI", recherche: {
   champs: [{typeChamp: "NUM_AFFAIRE", criteres: [{
-    typeRecherche: "EXACTE", valeur: "21-12.345", operateur: "ET"
+    typeRecherche: "EXPRESSION_EXACTE", valeur: "21-12.345", operateur: "ET"
   }], operateur: "ET"}],
   operateur: "ET", pageNumber: 1, pageSize: 5,
   sort: "PERTINENCE", typePagination: "DEFAUT"
@@ -38,34 +39,41 @@ searchUsingPOST(fond: "JURI", recherche: {
 
 ### Par ECLI
 ```
-searchUsingPOST(fond: "JURI", recherche: {
+search_texts(fond: "JURI", recherche: {
   champs: [{typeChamp: "ECLI", criteres: [{
-    typeRecherche: "EXACTE", valeur: "ECLI:FR:CCASS:2021:...", operateur: "ET"
+    typeRecherche: "EXPRESSION_EXACTE", valeur: "ECLI:FR:CCASS:2021:...", operateur: "ET"
   }], operateur: "ET"}],
   operateur: "ET", pageNumber: 1, pageSize: 5,
   sort: "PERTINENCE", typePagination: "DEFAUT"
 })
 ```
 
+### Approche graph-first (sujet conceptuel)
+```
+query_legal_graph(concept: "<concept juridique>")
+```
+Si le graphe retourne des décisions → accès direct via `get_jurisprudence`.
+
 ## Filtres utiles
 
-| Filtre | Valeurs |
-|--------|---------|
-| Juridiction | `COUR_CASSATION`, `TRIBUNAL_ADMINISTATIF`, `COURS_APPEL` |
-| Formation Cass. | `CHAMBRE_CIVILE_1`, `CHAMBRE_CIVILE_2`, `CHAMBRE_CIVILE_3`, `CHAMBRE_COMMERCIALE`, `CHAMBRE_SOCIALE`, `CHAMBRE_CRIMINELLE` |
-| Bulletin | `"T"` pour arrets publies au Bulletin |
+| Filtre | Facette | Valeurs |
+|--------|---------|---------|
+| Juridiction | `JURIDICTION_JUDICIAIRE` | `COUR_CASSATION`, `COURS_APPEL` |
+| Formation Cass. | `CASSATION_FORMATION` | `CHAMBRE_CIVILE_1`, `CHAMBRE_CIVILE_2`, `CHAMBRE_CIVILE_3`, `CHAMBRE_COMMERCIALE`, `CHAMBRE_SOCIALE`, `CHAMBRE_CRIMINELLE` |
+| Bulletin | `CASSATION_TYPE_PUBLICATION_BULLETIN` | `T` pour arrêts publiés |
 
 ## Fonds par juridiction
 
 - **JURI** : Cour de cassation, cours d'appel, tribunaux judiciaires
-- **CETAT** : Conseil d'Etat, cours administratives d'appel, tribunaux administratifs
+- **CETAT** : Conseil d'État, cours administratives d'appel, tribunaux administratifs
 - **CONSTIT** : Conseil constitutionnel (QPC, DC)
+- **JUFI** : Juridictions de première instance
 
-## Reponse attendue
+## Réponse attendue
 
-- Juridiction, formation, date
-- Numero de pourvoi / d'affaire
+- Citation complète : `Cass. [formation], [date], n° [pourvoi], [publication]`
 - Solution (cassation, rejet, annulation...)
-- Resume et motifs principaux
+- Résumé et motifs principaux
 - ECLI
-- Articles vises
+- Articles visés
+- Identifiant Légifrance (JURITEXT...)

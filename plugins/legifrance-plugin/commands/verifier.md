@@ -1,54 +1,50 @@
 ---
 name: verifier
-description: "Verifier une citation ou reference juridique : article de code, loi, decret, NOR, ECLI. Controle que le texte est exact, en vigueur, et non modifie."
+description: "Vérifier une citation ou référence juridique : article de code, loi, décret, NOR, ECLI. Contrôle que le texte est exact, en vigueur, et non modifié."
 ---
 
-# /verifier — Verification de reference juridique
+# /verifier — Vérification de référence juridique
 
-Verifie qu'une citation juridique est exacte et a jour, via le MCP Legifrance.
+Vérifie qu'une citation juridique est exacte et à jour, via le MCP Légifrance.
 
-## Types de references verifiables
+## Types de références vérifiables
 
 | Type | Exemple | Outil |
 |------|---------|-------|
-| Article de code | art. 1240 Code civil | `getArticleWithIdAndNumUsingPOST` |
-| Loi par numero | loi n° 2016-1691 | `searchUsingPOST` fond=LODA_DATE, typeChamp=NUM |
-| NOR | JUSC1732516D | `getJoWithNorUsingPOST` |
-| ECLI | ECLI:FR:CCASS:2021:... | `searchUsingPOST` fond=JURI, typeChamp=ECLI |
-| IDCC | 1486 | `displayKaliContByIdccUsingPOST` |
-| Numero de pourvoi | 21-12.345 | `searchUsingPOST` fond=JURI, typeChamp=NUM_AFFAIRE |
+| Article de code | art. 1240 Code civil | `get_article(textId: "...", num: "...")` |
+| Loi par numéro | loi n° 2016-1691 | `search_texts` fond=LODA_DATE, typeChamp=NUM |
+| NOR | JUSC1732516D | `get_jorf_text(nor: "JUSC1732516D")` |
+| ECLI | ECLI:FR:CCASS:2021:... | `search_texts` fond=JURI, typeChamp=ECLI |
+| IDCC | 1486 | `get_convention_container(idcc: "1486")` |
+| Numéro de pourvoi | 21-12.345 | `search_texts` fond=JURI, typeChamp=NUM_AFFAIRE |
 
 ## Workflow
 
-1. **Identifier le type de reference** dans la demande
-2. **Appeler l'outil adapte** (voir table ci-dessus)
-3. **Comparer** le texte cite par l'utilisateur avec le texte officiel
-4. **Verifier l'etat** : en vigueur, abroge, modifie
+1. **Identifier le type de référence** dans la demande
+2. **Appeler l'outil adapté** (voir table ci-dessus)
+3. **Comparer** le texte cité par l'utilisateur avec le texte officiel
+4. **Vérifier l'état** : en vigueur, abrogé, modifié
 5. **Rendre un verdict**
 
 ## Verdicts possibles
 
-- **Exacte** : le texte cite correspond au texte officiel en vigueur
-- **Approximative** : le sens est correct mais la formulation differe
-- **Erronee** : le texte cite ne correspond pas
-- **Modifiee** : l'article existe mais a ete modifie depuis (preciser la date de modification)
-- **Abrogee** : l'article ou le texte n'est plus en vigueur (indiquer le remplacant via concordance)
-- **Introuvable** : la reference n'existe pas dans Legifrance
+- **Exacte** : le texte cité correspond au texte officiel en vigueur
+- **Approximative** : le sens est correct mais la formulation diffère
+- **Erronée** : le texte cité ne correspond pas
+- **Modifiée** : l'article existe mais a été modifié depuis (préciser la date de modification)
+- **Abrogée** : l'article ou le texte n'est plus en vigueur (indiquer le remplaçant via concordance)
+- **Introuvable** : la référence n'existe pas dans Légifrance
 
-## En cas d'article abroge ou renumerote
+## En cas d'article abrogé ou renuméroté
 
-1. `displayConcordanceLinksArticleUsingPOST(articleId: "<LEGIARTI>")` pour trouver la correspondance
-2. Presenter l'ancien et le nouvel article
+1. `get_article_links(articleId: "<LEGIARTI>", linkType: "concordance")` pour trouver la correspondance
+2. Présenter l'ancien et le nouvel article
 
-Tables de concordance frequentes :
-- Code civil art. 1101-1386 → renumerotes en 2016 (ordonnance n° 2016-131)
-- Code du travail ancien → nouveau (recodification 2008)
-- Code de commerce ancien → nouveau (2000)
-
-## Reponse attendue
+## Réponse attendue
 
 - Verdict clair (voir ci-dessus)
 - Texte officiel actuel
-- Si different : ce qui a change et quand
-- Date de version consultee
-- Identifiant Legifrance pour reference
+- Si différent : ce qui a changé et quand
+- Date de version consultée
+- Identifiant Légifrance pour référence
+- Citation au format professionnel

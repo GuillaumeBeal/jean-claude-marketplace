@@ -1,22 +1,31 @@
 # Veille Juridique — Workflow et Mots-clés
 
-## Workflow en 4 étapes
+## Workflow en 5 étapes
 
 ### Étape 1 — Cadrer la demande
-Identifier : domaine juridique, période, niveau de détail souhaité.
+Identifier : domaine juridique, période, niveau de détail souhaité, audience (avocat, juriste d'entreprise, direction juridique).
 
-### Étape 2 — Lancer les recherches parallèles sur 4-5 fonds
+### Étape 2 — Explorer le graphe (si sujet conceptuel)
+
+Avant de lancer les recherches textuelles, vérifier le graphe :
+```
+query_legal_graph(concept: "<concept du domaine>", limit: 10)
+```
+Si des articles/décisions/textes sont déjà indexés → les inclure directement dans la revue.
+Sinon → passer à l'étape 3.
+
+### Étape 3 — Lancer les recherches parallèles sur 4-5 fonds
 
 **a) Jurisprudence judiciaire (JURI)**
 ```
-searchUsingPOST(fond: "JURI", recherche: {
+search_texts(fond: "JURI", recherche: {
   champs: [{typeChamp: "ALL", criteres: [{
     typeRecherche: "TOUS_LES_MOTS_DANS_UN_CHAMP",
     valeur: "<mots-clés du domaine>", operateur: "ET"
   }], operateur: "ET"}],
   filtres: [{facette: "DATE_DECISION", dates: {start: "<début>", end: "<fin>"}}],
   operateur: "ET", pageNumber: 1, pageSize: 20,
-  sort: "DATE_DECISION_DESC", typePagination: "DEFAUT"
+  sort: "DATE_DESC", typePagination: "DEFAUT"
 })
 ```
 
@@ -25,7 +34,7 @@ Même structure avec `fond: "CETAT"`.
 
 **c) Textes législatifs (LODA)**
 ```
-searchUsingPOST(fond: "LODA_DATE", recherche: {
+search_texts(fond: "LODA_DATE", recherche: {
   champs: [{typeChamp: "ALL", criteres: [{
     typeRecherche: "TOUS_LES_MOTS_DANS_UN_CHAMP",
     valeur: "<mots-clés du domaine>", operateur: "ET"
@@ -37,56 +46,42 @@ searchUsingPOST(fond: "LODA_DATE", recherche: {
 ```
 
 **d) Journal Officiel (JORF)**
-```
-searchUsingPOST(fond: "JORF", recherche: {
-  champs: [{typeChamp: "ALL", criteres: [{
-    typeRecherche: "TOUS_LES_MOTS_DANS_UN_CHAMP",
-    valeur: "<mots-clés du domaine>", operateur: "ET"
-  }], operateur: "ET"}],
-  filtres: [{facette: "DATE_PUBLICATION", dates: {start: "<début>", end: "<fin>"}}],
-  operateur: "ET", pageNumber: 1, pageSize: 10,
-  sort: "PUBLICATION_DATE_DESC", typePagination: "DEFAUT"
-})
-```
+Même structure avec `fond: "JORF"`, facette `DATE_PUBLICATION`, tri `PUBLICATION_DATE_DESC`.
 ⚠ JORF : utiliser `DATE_PUBLICATION` (pas `DATE_PUBLI` → erreur 500).
 
 **e) Délibérations CNIL** (si domaine RGPD / données personnelles)
-```
-searchUsingPOST(fond: "CNIL", recherche: {
-  champs: [{typeChamp: "ALL", criteres: [{
-    typeRecherche: "TOUS_LES_MOTS_DANS_UN_CHAMP",
-    valeur: "<mots-clés du domaine>", operateur: "ET"
-  }], operateur: "ET"}],
-  filtres: [{facette: "DATE_DELIB", dates: {start: "<début>", end: "<fin>"}}],
-  operateur: "ET", pageNumber: 1, pageSize: 10,
-  sort: "DATE_DECISION_DESC", typePagination: "DEFAUT"
-})
-```
+Même structure avec `fond: "CNIL"`, facette `DATE_DELIB`, tri `DATE_DECISION_DESC`.
 ⚠ CNIL : utiliser `DATE_DELIB` (pas `DATE_DECISION` → erreur 500).
 
-### Étape 3 — Approfondir les résultats pertinents
-- Jurisprudence : `displayJuriUsingPOST(textId: "JURITEXT...")`
-- Loi/décret : `displayLawDecreeUsingPOST(textId: "LEGITEXT...", date: "...")`
-- JORF : `displayJorfUsingPOST(textCid: "JORFTEXT...")`
-- CNIL : `displayCnilUsingPOST(textId: "CNILTEXT...")`
+**f) Conseil constitutionnel** (si QPC ou contrôle de constitutionnalité)
+Même structure avec `fond: "CONSTIT"`, facette `DATE_DECISION`, filtre optionnel `NATURE_CONSTIT: ["QPC"]`.
 
-### Étape 4 — Structurer la revue
+### Étape 4 — Approfondir les résultats pertinents
+- Jurisprudence : `get_jurisprudence(textId: "JURITEXT...")` + `get_jurisprudence_classification(textId: "...")` pour le plan de classement
+- Loi/décret : `get_law_decree(textId: "LEGITEXT...", date: "...")` ou `get_jorf_text(textCid: "JORFTEXT...")`
+- CNIL : `get_cnil_text(textId: "CNILTEXT...")`
+- Dossier législatif : `get_dossier_legislatif(id: "JORFDOLE...")` pour le parcours complet d'une loi
+
+### Étape 5 — Structurer la revue
 
 ```
 ## Revue d'actualité — [Domaine] — [Période]
 
-### 📜 Textes législatifs et réglementaires
-- [Loi/Décret n°... du ...] — [Résumé]
+### Textes législatifs et réglementaires
+- [Loi/Décret n°... du ...] — [Résumé et impact pratique]
 
-### ⚖️ Jurisprudence marquante
-- [Cass. com., date, n° pourvoi] — [Solution]
-- [CE, date, n° affaire] — [Solution]
+### Jurisprudence marquante
+- [Cass. com., date, n° pourvoi, publié au Bull.] — [Solution et portée]
+- [CE, date, n° affaire] — [Solution et portée]
 
-### 📰 Publications au Journal Officiel
+### Décisions CNIL / QPC (le cas échéant)
+- [Référence] — [Résumé]
+
+### Publications au Journal Officiel
 - [Texte] — [Résumé]
 
-### 💡 Points d'attention
-- [Changements à surveiller, entrées en vigueur prochaines]
+### Points d'attention
+- [Changements à surveiller, entrées en vigueur prochaines, réformes annoncées]
 ```
 
 ---
@@ -111,12 +106,14 @@ searchUsingPOST(fond: "CNIL", recherche: {
 - Général : `"impôt fiscal contribuable"`
 - TVA : `"TVA déduction taxe valeur ajoutée"`
 - Contrôle : `"redressement vérification comptabilité"`
+- Prix de transfert : `"prix transfert entreprise liée"`
 - Fonds prioritaires : CETAT, JURI, CODE_DATE (CGI)
 
 ### Droit immobilier
 - Construction : `"construction maître ouvrage permis"`
 - Bail : `"bail commercial locataire bailleur"`
 - Copropriété : `"copropriété syndic assemblée"`
+- Urbanisme : `"urbanisme permis construire PLU"`
 - Fonds prioritaires : JURI (3e chambre civile), CETAT, CODE_DATE (CCH, urbanisme)
 
 ### ESG / CSRD
@@ -144,12 +141,24 @@ searchUsingPOST(fond: "CNIL", recherche: {
 - Droit d'auteur : `"auteur reproduction droit oeuvre"`
 - Fonds prioritaires : JURI, CODE_DATE (CPI)
 
+### Droit bancaire et financier
+- Général : `"bancaire crédit prêt emprunteur"`
+- Régulation : `"AMF autorité marchés financiers"`
+- Financement : `"garantie sûreté cautionnement nantissement"`
+- Fonds prioritaires : JURI (Chambre commerciale), CETAT, CODE_DATE (CMF)
+
+### Droit de la concurrence
+- Pratiques anticoncurrentielles : `"entente concurrence pratique anticoncurrentielle"`
+- Abus de position dominante : `"abus position dominante marché"`
+- Concentrations : `"concentration opération notification"`
+- Fonds prioritaires : CETAT, JURI (Chambre commerciale), LODA
+
 ---
 
 ## Stratégies par durée
 
 ### Courte (1 semaine)
-- `getLastNJoUsingPOST(nbElement: 7)` pour les JO récents
+- `get_last_journals(nbElement: 3)` pour les JO récents (limiter à 3 pour le contexte)
 - Recherches avec pageSize: 10
 - Focus sur les textes publiés et décisions rendues
 
@@ -157,8 +166,10 @@ searchUsingPOST(fond: "CNIL", recherche: {
 - pageSize: 20
 - Filtrer JURI par `COUR_CASSATION` pour ne garder que les décisions significatives
 - Ajouter filtre `CASSATION_TYPE_PUBLICATION_BULLETIN: ["T"]` pour les arrêts publiés
+- Inclure CONSTIT si QPC pertinentes
 
 ### Longue (6-12 mois)
 - Décomposer en trimestres pour ne pas dépasser la pagination
 - Focus sur les décisions publiées au Bulletin
 - Synthétiser par tendances et évolutions
+- Inclure dossiers législatifs pour les réformes en cours
