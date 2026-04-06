@@ -7,8 +7,8 @@ Patterns détaillés pour les cas complexes. Consulter quand les workflows de ba
 L'utilisateur mentionne "l'article 1382" devenu "l'article 1240" après la réforme de 2016.
 
 1. `get_article(textId: "LEGITEXT000006070721", num: "1382")`
-2. Si `etat: "ABROGE"` ou `"TRANSFERE"` → noter le LEGIARTI
-3. `get_article_links(articleId: "<LEGIARTI>", linkType: "concordance")` → correspondance ancien → nouveau
+2. Si `etat: "ABROGE"` ou `"TRANSFERE"` → consulter le champ `lienConcordes` dans la réponse
+3. `lienConcordes` contient la correspondance ancien → nouveau (LEGIARTI de l'article remplaçant)
 4. `get_article(id: "<nouveau LEGIARTI>")` → texte actuel
 5. Expliquer la correspondance ancien → nouveau à l'utilisateur
 
@@ -44,7 +44,7 @@ Alternative :
 ```json
 search_texts(fond: "JURI", recherche: {
   champs: [{typeChamp: "NUM_AFFAIRE", criteres: [{
-    typeRecherche: "EXPRESSION_EXACTE", valeur: "21-12.345", operateur: "ET"
+    typeRecherche: "EXACTE", valeur: "21-12.345", operateur: "ET"
   }], operateur: "ET"}],
   operateur: "ET", pageNumber: 1, pageSize: 5,
   sort: "PERTINENCE", typePagination: "DEFAUT"
@@ -55,7 +55,7 @@ search_texts(fond: "JURI", recherche: {
 ```json
 search_texts(fond: "JURI", recherche: {
   champs: [{typeChamp: "ECLI", criteres: [{
-    typeRecherche: "EXPRESSION_EXACTE", valeur: "ECLI:FR:CCASS:2021:...", operateur: "ET"
+    typeRecherche: "EXACTE", valeur: "ECLI:FR:CCASS:2021:...", operateur: "ET"
   }], operateur: "ET"}],
   operateur: "ET", pageNumber: 1, pageSize: 5,
   sort: "PERTINENCE", typePagination: "DEFAUT"
@@ -128,8 +128,9 @@ search_nearest_version(cidText: "LEGITEXT000006070721", date: "2012-06-15")
 3. Verdict : ✅ exacte / ⚠️ approximative / ❌ erronée / 📅 modifiée / ⛔ abrogée
 
 Si abrogé :
-1. `get_article_links(articleId: "<LEGIARTI>", linkType: "concordance")` → nouvel article
-2. Présenter l'ancien ET le nouveau
+1. Consulter `lienConcordes` dans la réponse de `get_article` → correspondance vers le nouvel article
+2. `get_article(id: "<nouveau LEGIARTI>")` → récupérer le remplaçant
+3. Présenter l'ancien ET le nouveau
 
 ## Pattern 8 : Textes récents au JORF
 

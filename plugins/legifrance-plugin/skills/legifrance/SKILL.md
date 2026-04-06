@@ -77,7 +77,7 @@ Codes les plus fréquents (liste complète dans `references/tools-catalog.md`) :
 
 **Enrichissement optionnel** (recommandé pour les questions de fond) :
 - `get_article_context(article_id: "<LEGIARTI>")` → concepts associés, décisions citantes, domaine juridique
-- `get_article_links(articleId: "<LEGIARTI>", linkType: "all")` → concordance + citations + fiches service-public.fr
+- La concordance ancien→nouveau est déjà dans le champ `lienConcordes` de la réponse `get_article`
 
 ### Cas 2 : Loi par nom ou sujet — `search_texts`
 

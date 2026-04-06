@@ -49,13 +49,9 @@
 
 | Outil | Paramètres clés | Usage |
 |-------|-----------------|-------|
-| `get_article_links` | `articleId`, `linkType` | **Outil unifié** pour concordance, citations, service-public |
-| | `linkType="concordance"` | Liens ancien ↔ nouveau numéro |
-| | `linkType="related"` | Citations de l'article |
-| | `linkType="same_num"` | Articles ayant eu le même numéro (+ `articleCid`, `textCid`, `articleNum`, `date`) |
-| | `linkType="service_public"` | Fiches service-public.fr (+ `articleCid`) |
-| | `linkType="all"` | Tous les types (défaut) |
 | `get_article_context` | `article_id` | Concepts associés, décisions citantes, domaine juridique |
+
+**Note** : La concordance ancien↔nouveau numéro est disponible dans le champ `lienConcordes` de la réponse `get_article`. Pas besoin d'outil séparé.
 
 ## 6. GRAPHE DE CONNAISSANCES
 

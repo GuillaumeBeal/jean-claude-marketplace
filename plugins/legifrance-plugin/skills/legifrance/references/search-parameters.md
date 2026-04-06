@@ -25,7 +25,7 @@
 |--------|-------|
 | `UN_DES_MOTS` | Au moins un mot trouvé — recherche large |
 | `TOUS_LES_MOTS_DANS_UN_CHAMP` | Tous les mots présents (+ proximité optionnelle) — recherche précise |
-| `EXPRESSION_EXACTE` | Expression exacte entre guillemets |
+| `EXACTE` | Expression exacte (identifiants, numéros de pourvoi, ECLI) |
 | `AUCUN_DES_MOTS` | Exclure des mots |
 | `AUCUNE_CORRESPONDANCE_A_CETTE_EXPRESSION` | Exclure une expression |
 

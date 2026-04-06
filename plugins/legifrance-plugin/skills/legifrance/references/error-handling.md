@@ -52,8 +52,8 @@ Les erreurs 500 les plus fréquentes viennent de **mauvaises facettes de date**.
 **Symptôme** : `etat: "ABROGE"` dans la réponse.
 
 **Action** :
-1. `get_article_links(articleId: "<LEGIARTI>", linkType: "concordance")` pour trouver le nouvel article
-2. Si concordance trouvée → récupérer le nouvel article via `get_article`
+1. Consulter le champ `lienConcordes` dans la réponse de `get_article` → correspondance ancien→nouveau numéro
+2. Si concordance trouvée → `get_article(id: "<nouveau LEGIARTI>")` pour récupérer le nouvel article
 3. Présenter l'ancien ET le nouveau à l'utilisateur
 
 **Message utilisateur** :
