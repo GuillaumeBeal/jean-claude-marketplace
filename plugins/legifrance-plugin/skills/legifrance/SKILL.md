@@ -25,6 +25,7 @@ Skill pour cabinets d'avocats et juristes professionnels. Accès au droit franç
 6. **`search_texts` est TOUJOURS préférable** à `cross_search_suggest` (qui ne fait que de l'autocomplétion).
 7. **Facettes de date strictes** : chaque fond a sa propre facette. Voir table ci-dessous.
 8. **Préférer `get_filtered_table_of_contents`** à `get_table_of_contents` pour éviter les réponses de 3+ MB.
+9. **Ne jamais conclure à une suppression sans vérifier la section entière** : quand un article semble avoir perdu un contenu substantiel (suppression d'un régime, d'une liste, d'une catégorie...), le contenu a très souvent été *déplacé* dans un article voisin créé par la même loi modificatrice. Vérifier systématiquement la section parente avant de conclure à une abrogation réelle.
 
 ## Facettes de date par fond — OBLIGATOIRE
 
@@ -208,7 +209,27 @@ get_filtered_table_of_contents(
 
 Puis naviguer dans la section : `get_code_content(textId: "...", date: "...", sctCid: "LEGISCTA...")`.
 
-### Cas 12 : Accords d'entreprise
+### Cas 12 : Vérification après modification législative majeure (anti-faux-négatif)
+
+Quand un article est marqué MODIFIE par une loi récente et qu'un contenu substantiel semble avoir disparu (un régime, une catégorie de personnes, une procédure), le réflexe d'un juriste est de vérifier si ce contenu a été déplacé dans un article voisin. Sans ce réflexe, on risque d'annoncer à tort une suppression alors que le législateur a simplement restructuré la section.
+
+**Workflow :**
+1. Relever la référence de la loi modificatrice dans les métadonnées de l'article (ex: LOI n° 2025-391 du 30 avril 2025)
+2. Appeler `get_filtered_table_of_contents` sur la section parente de l'article pour lister tous les articles de la section à la date du jour :
+   ```
+   get_filtered_table_of_contents(
+     textId: "<LEGITEXT du code>",
+     date: "<date du jour>",
+     max_depth: 3,
+     section_filter: "<nom ou numéro de la section parente>"
+   )
+   ```
+3. Identifier les articles créés (nouveaux numéros, ex: L561-46-1, L561-46-2) par la même loi et les consulter via `get_article`
+4. Seulement alors conclure sur ce qui a été supprimé, déplacé ou maintenu
+
+**Exemple concret** : L'article L561-46 du CMF a été modifié par la loi du 30 avril 2025 et ne mentionne plus les tiers à intérêt légitime. Mais la même loi a créé l'article L561-46-2 qui reprend ce régime. Sans vérification de la section 9, on conclurait à tort à une suppression.
+
+### Cas 13 : Accords d'entreprise
 
 1. `suggest_siret(searchText: "Société Générale")` → trouver le SIRET
 2. `search_texts(fond: "ACCO", ...)` avec filtre IDCC ou mots-clés
